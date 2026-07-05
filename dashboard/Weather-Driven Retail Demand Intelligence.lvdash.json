@@ -1,0 +1,728 @@
+{
+  "datasets": [
+    {
+      "name": "79c279a1",
+      "displayName": "current_demand_signal",
+      "config": {
+        "version": "1.1",
+        "source": "SELECT * FROM retail_demo.retail_gold.demand_signal_history\r\n",
+        "dimensions": [
+          {
+            "name": "store_id",
+            "expr": "source.store_id",
+            "displayName": "Store Id"
+          },
+          {
+            "name": "city",
+            "expr": "source.city",
+            "displayName": "City"
+          },
+          {
+            "name": "region",
+            "expr": "source.region",
+            "displayName": "Region"
+          },
+          {
+            "name": "observation_time",
+            "expr": "source.observation_time",
+            "displayName": "Observation Time"
+          },
+          {
+            "name": "temperature_f",
+            "expr": "source.temperature_f",
+            "displayName": "Temperature F"
+          },
+          {
+            "name": "precipitation_in",
+            "expr": "source.precipitation_in",
+            "displayName": "Precipitation In"
+          },
+          {
+            "name": "weather_code",
+            "expr": "source.weather_code",
+            "displayName": "Weather Code"
+          },
+          {
+            "name": "wind_speed_mph",
+            "expr": "source.wind_speed_mph",
+            "displayName": "Wind Speed Mph"
+          },
+          {
+            "name": "humidity_pct",
+            "expr": "source.humidity_pct",
+            "displayName": "Humidity Pct"
+          },
+          {
+            "name": "ingestion_timestamp",
+            "expr": "source.ingestion_timestamp",
+            "displayName": "Ingestion Timestamp"
+          },
+          {
+            "name": "category_focus",
+            "expr": "source.category_focus",
+            "displayName": "Category Focus"
+          },
+          {
+            "name": "rain_gear_demand",
+            "expr": "source.rain_gear_demand",
+            "displayName": "Rain Gear Demand"
+          },
+          {
+            "name": "ac_cooling_demand",
+            "expr": "source.ac_cooling_demand",
+            "displayName": "Ac Cooling Demand"
+          },
+          {
+            "name": "outdoor_event_risk",
+            "expr": "source.outdoor_event_risk",
+            "displayName": "Outdoor Event Risk"
+          },
+          {
+            "name": "staffing_recommendation",
+            "expr": "source.staffing_recommendation",
+            "displayName": "Staffing Recommendation"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "46f4bb04",
+      "displayName": "Retail Weather Impact On Store Demand Data",
+      "queryLines": [
+        "SELECT\n",
+        "  store_id,\n",
+        "  city,\n",
+        "  region,\n",
+        "  observation_time,\n",
+        "  temperature_f,\n",
+        "  precipitation_in,\n",
+        "  ac_cooling_demand,\n",
+        "  rain_gear_demand\n",
+        "FROM\n",
+        "  retail_demo.retail_gold.demand_signal_history\n",
+        "ORDER BY\n",
+        "  observation_time"
+      ]
+    },
+    {
+      "name": "forecast_planner",
+      "displayName": "14-Day Staffing Forecast Data",
+      "queryLines": [
+        "SELECT\n",
+        "  store_id,\n",
+        "  city,\n",
+        "  region,\n",
+        "  forecast_date,\n",
+        "  staffing_recommendation,\n",
+        "  temp_max_f,\n",
+        "  precip_prob_pct\n",
+        "FROM\n",
+        "  retail_demo.retail_gold.demand_signal_forecast\n",
+        "ORDER BY\n",
+        "  forecast_date,\n",
+        "  store_id"
+      ]
+    },
+    {
+      "name": "region_temp_avg",
+      "displayName": "Regional Temperature Averages",
+      "queryLines": [
+        "SELECT\n",
+        "  region,\n",
+        "  observation_time,\n",
+        "  AVG(temperature_f) AS avg_temp_f\n",
+        "FROM\n",
+        "  retail_demo.retail_gold.demand_signal_history\n",
+        "GROUP BY\n",
+        "  region,\n",
+        "  observation_time\n",
+        "ORDER BY\n",
+        "  observation_time"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "086225f5",
+      "displayName": "Operations Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "region_filter",
+            "queries": [
+              {
+                "name": "dashboards/01f17728963f1dfda38220eff6a5f44b/datasets/01f177292b7017e0985867d32d4dea71_region",
+                "query": {
+                  "datasetName": "79c279a1",
+                  "fields": [
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "region_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f17728963f1dfda38220eff6a5f44b/datasets/01f17729594519eb96f573e6b01aec48_region",
+                "query": {
+                  "datasetName": "46f4bb04",
+                  "fields": [
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "region_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f17728963f1dfda38220eff6a5f44b/datasets/01f178b33aab1a518e74e171ef151570_region",
+                "query": {
+                  "datasetName": "region_temp_avg",
+                  "fields": [
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "region_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Region Filter",
+                "description": "Filter all dashboard visuals by geographic region",
+                "showTitle": true,
+                "showDescription": true
+              },
+              "scale": {
+                "type": "categorical"
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "region",
+                    "queryName": "dashboards/01f17728963f1dfda38220eff6a5f44b/datasets/01f177292b7017e0985867d32d4dea71_region"
+                  },
+                  {
+                    "fieldName": "region",
+                    "queryName": "dashboards/01f17728963f1dfda38220eff6a5f44b/datasets/01f17729594519eb96f573e6b01aec48_region"
+                  },
+                  {
+                    "fieldName": "region",
+                    "queryName": "dashboards/01f17728963f1dfda38220eff6a5f44b/datasets/01f178b33aab1a518e74e171ef151570_region"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "ops_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "79c279a1",
+                  "fields": [
+                    {
+                      "name": "city",
+                      "expression": "`city`"
+                    },
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "category_focus",
+                      "expression": "`category_focus`"
+                    },
+                    {
+                      "name": "temperature_f",
+                      "expression": "`temperature_f`"
+                    },
+                    {
+                      "name": "precipitation_in",
+                      "expression": "`precipitation_in`"
+                    },
+                    {
+                      "name": "staffing_recommendation",
+                      "expression": "`staffing_recommendation`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Daily Operations View",
+                "description": "Complete morning operations snapshot showing all stores with real-time weather conditions, category focus, and AI-driven staffing recommendations. Filter by region to focus on specific geographic areas.",
+                "showTitle": true,
+                "showDescription": true
+              },
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "city"
+                  },
+                  {
+                    "fieldName": "region"
+                  },
+                  {
+                    "fieldName": "category_focus"
+                  },
+                  {
+                    "fieldName": "temperature_f"
+                  },
+                  {
+                    "fieldName": "precipitation_in"
+                  },
+                  {
+                    "fieldName": "staffing_recommendation"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 29,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "staffing_by_region",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "79c279a1",
+                  "fields": [
+                    {
+                      "name": "staffing_recommendation",
+                      "expression": "`staffing_recommendation`"
+                    },
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Staffing Needs by Region",
+                "description": "Compare staffing recommendations across regions. Green bars show standard staffing, orange/red show stores requiring increased staff due to high demand signals.",
+                "showTitle": true,
+                "showDescription": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "region",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "staffing_recommendation",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 17,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "ac_demand_by_store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "79c279a1",
+                  "fields": [
+                    {
+                      "name": "ac_cooling_demand",
+                      "expression": "`ac_cooling_demand`"
+                    },
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    },
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "AC Cooling Demand by Store",
+                "description": "Weather-driven AC and cooling product demand by store location. High demand (red) indicates temperatures above 85°F requiring proactive cooling equipment stocking.",
+                "showTitle": true,
+                "showDescription": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "store_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "ac_cooling_demand",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 17,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "rain_gear_demand_by_store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "79c279a1",
+                  "fields": [
+                    {
+                      "name": "rain_gear_demand",
+                      "expression": "`rain_gear_demand`"
+                    },
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    },
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Rain Gear Demand by Store",
+                "description": "Precipitation-triggered demand for rain gear and weather protection products. High demand signals precipitation above 0.5 inches requiring increased stock levels.",
+                "showTitle": true,
+                "showDescription": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "store_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "rain_gear_demand",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 23,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "temp_history",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "46f4bb04",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    },
+                    {
+                      "name": "observation_time",
+                      "expression": "`observation_time`"
+                    },
+                    {
+                      "name": "temperature_f",
+                      "expression": "`temperature_f`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Temperature Trends Over Time",
+                "description": "Historical temperature tracking proves continuous pipeline operation. Each colored line represents a store's temperature trend, validating real-time data ingestion from the automated job.",
+                "showTitle": true,
+                "showDescription": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "observation_time",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "temperature_f",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "store_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "executive_summary",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Weather-Driven Retail Demand Intelligence\n",
+                "\n",
+                "**Business Impact:** This dashboard transforms real-time weather data into actionable retail intelligence, enabling proactive inventory management, optimized staffing, and category-specific merchandising decisions.\n",
+                "\n",
+                "**Key Capabilities:**\n",
+                "* **Predictive Staffing:** Identifies stores requiring increased staff based on weather-driven demand signals (AC cooling, rain gear, outdoor events)\n",
+                "* **Regional Intelligence:** Compare demand patterns across West, Mountain, South, Midwest, and Northeast regions\n",
+                "* **Historical Validation:** Proves continuous pipeline operation with time-series temperature tracking\n",
+                "* **Operational Efficiency:** Morning operations view provides at-a-glance city-level demand signals\n",
+                "\n",
+                "**ROI Drivers:** Reduced stockouts during weather events, optimized labor costs, improved customer satisfaction through better product availability, and data-driven category focus alignment.\n",
+                "\n",
+                "*Use the Region filter above to drill into specific geographic areas.*"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "region_temp_trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "region_temp_avg",
+                  "fields": [
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "observation_time",
+                      "expression": "`observation_time`"
+                    },
+                    {
+                      "name": "avg_temp_f",
+                      "expression": "`avg_temp_f`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Average Temperature Trend by Region",
+                "description": "Regional temperature averages over time. Each line represents one region's aggregated temperature pattern.",
+                "showTitle": true,
+                "showDescription": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "observation_time",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg_temp_f",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "region",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "fontColor": {
+        "light": "#1F272D",
+        "dark": "#FFFFFF"
+      },
+      "widgetHeaderAlignment": "LEFT",
+      "fontFamily": "Inter",
+      "widgetPadding": 16,
+      "widgetCornerRadius": 8,
+      "fontSettings": {
+        "base": {
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": 400
+        },
+        "widgetTitle": {
+          "fontFamily": "Inter",
+          "fontSize": 16,
+          "fontWeight": 600
+        },
+        "fieldTitle": {
+          "fontSize": 12,
+          "fontWeight": 500
+        }
+      }
+    },
+    "applyModeEnabled": false
+  }
+}
