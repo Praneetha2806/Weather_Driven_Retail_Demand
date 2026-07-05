@@ -101,7 +101,7 @@
         "  store_id,\n",
         "  city,\n",
         "  region,\n",
-        "  observation_time,\n",
+        "  DATE(observation_time) AS observation_date,\n",
         "  temperature_f,\n",
         "  precipitation_in,\n",
         "  ac_cooling_demand,\n",
@@ -109,7 +109,7 @@
         "FROM\n",
         "  retail_demo.retail_gold.demand_signal_history\n",
         "ORDER BY\n",
-        "  observation_time"
+        "  observation_date"
       ]
     },
     {
@@ -137,15 +137,15 @@
       "queryLines": [
         "SELECT\n",
         "  region,\n",
-        "  observation_time,\n",
+        "  DATE(observation_time) AS observation_date,\n",
         "  AVG(temperature_f) AS avg_temp_f\n",
         "FROM\n",
         "  retail_demo.retail_gold.demand_signal_history\n",
         "GROUP BY\n",
         "  region,\n",
-        "  observation_time\n",
+        "  DATE(observation_time)\n",
         "ORDER BY\n",
-        "  observation_time"
+        "  observation_date"
       ]
     }
   ],
@@ -543,8 +543,8 @@
                       "expression": "`store_id`"
                     },
                     {
-                      "name": "observation_time",
-                      "expression": "`observation_time`"
+                      "name": "observation_date",
+                      "expression": "`observation_date`"
                     },
                     {
                       "name": "temperature_f",
@@ -556,19 +556,22 @@
               }
             ],
             "spec": {
-              "version": 3,
               "frame": {
                 "title": "Temperature Trends Over Time",
-                "description": "Historical temperature tracking proves continuous pipeline operation. Each colored line represents a store's temperature trend, validating real-time data ingestion from the automated job.",
+                "description": "Store-level temperature tracking showing complete historical trends. Each colored line represents a store's temperature pattern.",
                 "showTitle": true,
                 "showDescription": true
               },
+              "version": 3,
               "widgetType": "line",
               "encodings": {
                 "x": {
-                  "fieldName": "observation_time",
+                  "fieldName": "observation_date",
+                  "axis": {
+                    "labelAngle": 45
+                  },
                   "scale": {
-                    "type": "categorical"
+                    "type": "temporal"
                   }
                 },
                 "y": {
@@ -638,8 +641,8 @@
                       "expression": "`region`"
                     },
                     {
-                      "name": "observation_time",
-                      "expression": "`observation_time`"
+                      "name": "observation_date",
+                      "expression": "`observation_date`"
                     },
                     {
                       "name": "avg_temp_f",
@@ -651,19 +654,22 @@
               }
             ],
             "spec": {
-              "version": 3,
               "frame": {
                 "title": "Average Temperature Trend by Region",
-                "description": "Regional temperature averages over time. Each line represents one region's aggregated temperature pattern.",
+                "description": "Regional temperature averages showing complete historical trends. Each line represents one region's aggregated temperature pattern.",
                 "showTitle": true,
                 "showDescription": true
               },
+              "version": 3,
               "widgetType": "line",
               "encodings": {
                 "x": {
-                  "fieldName": "observation_time",
+                  "fieldName": "observation_date",
+                  "axis": {
+                    "labelAngle": 45
+                  },
                   "scale": {
-                    "type": "categorical"
+                    "type": "temporal"
                   }
                 },
                 "y": {
@@ -709,17 +715,23 @@
       "fontSettings": {
         "base": {
           "fontFamily": "Inter",
-          "fontSize": 13,
+          "fontSize": 14,
           "fontWeight": 400
         },
         "widgetTitle": {
           "fontFamily": "Inter",
-          "fontSize": 16,
+          "fontSize": 18,
           "fontWeight": 600
         },
         "fieldTitle": {
-          "fontSize": 12,
+          "fontFamily": "Inter",
+          "fontSize": 13,
           "fontWeight": 500
+        },
+        "fieldValue": {
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": 400
         }
       }
     },
