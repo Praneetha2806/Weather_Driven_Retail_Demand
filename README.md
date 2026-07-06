@@ -54,10 +54,11 @@ This system:
 4. **Delivers insights** via an interactive dashboard updated every 3 hours
 5. **Provides 14-day forecasts** for proactive workforce planning
 
-### Impact
-- ✅ **Reduced labor costs** by 12-15% through optimized staffing
-- ✅ **Increased sales** by 8-10% via better product availability
-- ✅ **Improved customer satisfaction** with shorter wait times during peak weather events
+### Potential Impact
+This system provides the operational intelligence needed to:
+- ⚡ **Optimize staffing decisions** with weather-driven foot traffic predictions
+- 📦 **Improve product availability** for weather-sensitive items (AC units, rain gear)
+- 👥 **Enhance customer experience** by reducing wait times during weather events
 
 ---
 
@@ -215,6 +216,9 @@ This system:
 ## 📊 Dashboard & Analytics
 
 ### Dashboard: **Weather-Driven Retail Demand Intelligence**
+
+![Dashboard Overview](dashboard/dashboard_screenshot.png)
+*Interactive dashboard showing real-time weather conditions, demand signals, and 14-day staffing forecast*
 
 #### Widgets
 1. **Region Filter** (Dropdown)
