@@ -344,12 +344,20 @@ weather-driven-retail-demand/
 ## 💡 Business Impact
 
 ### Quantified Outcomes
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Labor Cost Efficiency | Baseline | -12% | $180K annual savings (13 stores) |
-| Product Availability (weather-sensitive) | 78% | 95% | +17 points |
-| Customer Wait Time (peak weather events) | 8.5 min | 4.2 min | -51% |
-| Lost Sales (stockouts) | $42K/month | $12K/month | -71% |
+This project demonstrates a rule-based framework for translating weather signals into retail 
+operational recommendations. The demand-signal thresholds (e.g., AC/cooling demand, rain gear 
+demand, staffing recommendations) are based on general, well-documented retail weather patterns 
+— not derived from or validated against actual sales data, since no real point-of-sale dataset 
+was available for this project.
+
+**What this means:** figures like "increased sales" or "cost savings" are not calculated or 
+measured anywhere in this pipeline — no such numbers are claimed here.
+
+**What would be needed to measure real impact:** access to historical store-level sales data, 
+correlated against the weather variables already being captured (temperature, precipitation, 
+wind), using a statistical method such as regression analysis to quantify the actual relationship 
+— confirming which thresholds meaningfully predict demand shifts, and by how much, at these 
+specific stores.
 
 ### Stakeholder Value
 - **Store Managers**: Real-time staffing guidance, eliminating guesswork
@@ -422,5 +430,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Community**: Databricks Community Edition for democratizing data engineering
 
 ---
+
+## Limitations & Future Work
+
+**Current limitations:**
+- Demand-signal scoring uses fixed, rule-based thresholds (e.g., "precipitation > 0.1in → High 
+  rain gear demand") based on general retail knowledge, not statistically validated against real 
+  sales outcomes.
+- Store locations represent sample major-metro coordinates, not actual retail store addresses.
+- Category mix per store (`category_focus`) is illustrative, not based on real inventory data.
+
+**Future work:**
+- Validate demand-signal thresholds against real POS/sales data using regression analysis, to 
+  confirm and quantify the actual relationship between weather conditions and sales by category.
+- Extend the pipeline to ingest 14-day forecast data (in addition to current conditions) to 
+  support staffing and inventory planning on a realistic 1–2 week retail planning horizon.
+- Once sufficient history accumulates, analyze `demand_signal_history` for seasonal patterns 
+  by region, and explore time-series forecasting (e.g., Prophet, ARIMA) as a predictive layer 
+  on top of the current rule-based approach.
+
+  ---
 
 **⭐ If you found this project helpful, please give it a star on GitHub!**
